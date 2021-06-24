@@ -1,15 +1,15 @@
-# RipperDec
+# RipperDeck
 
-A Cyberpunk 2077 mod for managing cyberware without visiting ripperdoc.
+RipperDeck is a portable module that allows you to manage your cyberware without visiting ripperdoc. 
 
-- **Equip** or **replace** owned cyberware.
-- **Unequip** installed cyberware.
-- **Dispose** unwanted cyberware.
+- **Equip** or **replace** owned cyberware
+- **Unequip** installed cyberware
+- **Dispose** unwanted cyberware
 
 ## Requirements
 
-- [Cyber Engine Tweaks](https://github.com/yamashi/CyberEngineTweaks) 1.14.0+
-- Cyberpunk 2077 1.23+
+- [Cyber Engine Tweaks](https://github.com/yamashi/CyberEngineTweaks) 1.14.0
+- Cyberpunk 2077 1.23
 
 ## Installation
 
@@ -29,6 +29,6 @@ So just open the *Hub* menu to access it.
 
 ## Acknowledgements
 
-- [yamashi](https://github.com/yamashi), [WSSDude420](https://github.com/WSSDude420), [Sombra](https://github.com/Sombra0xCC), [Expired](https://github.com/expired6978) and [Cyber Engine Tweaks](https://github.com/yamashi/CyberEngineTweaks) team
-- [WolvenKit](https://github.com/WolvenKit), [WopsS](https://github.com/WopsS), [rfuzzo](https://github.com/rfuzzo), [Rick Gibbed](https://github.com/gibbed), [PixelRick](https://github.com/PixelRick) and all researchers
+- [yamashi](https://github.com/yamashi), [WSSDude420](https://github.com/WSSDude420), [Sombra](https://github.com/Sombra0xCC), [Expired](https://github.com/expired6978) and all [Cyber Engine Tweaks](https://github.com/yamashi/CyberEngineTweaks) team
+- [RED Modding tools](https://github.com/WolvenKit), [WopsS](https://github.com/WopsS), [rfuzzo](https://github.com/rfuzzo), [Rick Gibbed](https://github.com/gibbed), [PixelRick](https://github.com/PixelRick) and all researchers
 - [CP77 Modding Community Discord](https://discord.gg/VhdvZncG6f)

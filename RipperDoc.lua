@@ -23,6 +23,7 @@ end
 
 function RipperDoc.Init()
 	dropAction = CName.new(dropAction)
+	unequipAction = CName.new(unequipAction)
 
 	if not TweakDB:GetRecord('_CWA_.Character.RemoteRipperDoc') then
 		TweakDB:CloneRecord('_CWA_.Character.RemoteRipperDoc', 'Character.Victor_Vector')
