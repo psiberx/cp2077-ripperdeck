@@ -55,7 +55,7 @@ end)
 --registerForEvent('onDraw', function()
 --	ModUI.Draw()
 --end)
-
---registerHotkey('OpenCyberware', 'Manage Cyberware', function()
+--
+--registerHotkey('ManageCyberware', 'Manage Cyberware', function()
 --	RipperDoc.Activate()
 --end)

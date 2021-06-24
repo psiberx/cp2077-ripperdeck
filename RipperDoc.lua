@@ -58,31 +58,42 @@ function RipperDoc.Init()
 	end)
 
 	Observe('Vendor', 'OnVendorMenuOpen', function()
+		if isRipperDeck and ripperDocEntity then
+			Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
+			ripperDocEntity = nil
+		end
+
 		isVendorMenu = true
 	end)
 
-	Observe('MenuScenario_Vendor', 'OnLeaveScenario', function()
-		if isVendorMenu and ripperDocEntityId and ripperDocEntity then
-			local marketSystem = MarketSystem.GetInstance()
+	Observe('MenuScenario_Vendor', 'OnLeaveScenario', function(self)
+		if self:IsA('MenuScenario_Vendor') then
+			isVendorMenu = false
 
-			for i, vendor in ipairs(marketSystem.vendors) do
-				if vendor.vendorObject then
-					if vendor.vendorObject:GetEntityID().hash == ripperDocEntityId.hash then
-						local vendors = marketSystem.vendors
-						table.remove(vendors, i)
-						marketSystem.vendors = vendors
-						break
+			if ripperDocEntityId then
+				local marketSystem = MarketSystem.GetInstance()
+
+				for i, vendor in ipairs(marketSystem.vendors) do
+					if vendor.vendorObject then
+						if vendor.vendorObject:GetEntityID().hash == ripperDocEntityId.hash then
+							local vendors = marketSystem.vendors
+							table.remove(vendors, i)
+							marketSystem.vendors = vendors
+							break
+						end
 					end
 				end
+
+				marketSystem:ClearVendorHashMap()
+				ripperDocEntityId = nil
 			end
 
-			marketSystem:ClearVendorHashMap()
-
-			Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
-
-			ripperDocEntityId = nil
-			ripperDocEntity = nil
-			isVendorMenu = false
+			if ripperDocEntity then
+				Cron.After(0.1, function()
+					Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntity:GetEntityID())
+					ripperDocEntity = nil
+				end)
+			end
 		end
 	end)
 
@@ -119,12 +130,14 @@ function RipperDoc.Init()
 	end)
 
 	Observe('RipperDocGameController', 'SetInventoryItemButtonHintsHoverOut', function(self)
-		self.buttonHintsController:RemoveButtonHint(dropAction)
-		self.buttonHintsController:RemoveButtonHint(unequipAction)
+		if isRipperDeck then
+			self.buttonHintsController:RemoveButtonHint(dropAction)
+			self.buttonHintsController:RemoveButtonHint(unequipAction)
+		end
 	end)
 
 	Observe('InventoryItemDisplayController', 'OnDisplayClicked', function(self, event)
-		if ripperDocController then
+		if isRipperDeck then
 			if event:IsAction(unequipAction) and self.itemData.IsEquipped then
 				Game.GetScriptableSystemsContainer():Get('EquipmentSystem'):GetPlayerData(Game.GetPlayer()):UnequipItem(self.itemData.ID)
 
@@ -189,7 +202,7 @@ function RipperDoc.Activate(ripperDoc)
 
 	local player = Game.GetPlayer()
 	local forwardVector = player:GetWorldForward()
-	local offsetVector = Vector3.new(forwardVector.x * -1, forwardVector.y * -1, 2)
+	local offsetVector = Vector3.new(forwardVector.x * -1, forwardVector.y * -1, -10)
 	local spawnTransform = player:GetWorldTransform()
 	local spawnPosition = spawnTransform.Position:ToVector4()
 	spawnTransform:SetPosition(Vector4.new(
