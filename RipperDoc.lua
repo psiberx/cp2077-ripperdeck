@@ -71,6 +71,7 @@ function RipperDoc.Init()
 		Cron.After(0.001, function()
 			if self:IsA('MenuScenario_Vendor') then
 				isVendorMenu = false
+				isRipperDeck = false
 
 				if ripperDocEntityId then
 					local marketSystem = MarketSystem.GetInstance()
@@ -118,7 +119,7 @@ function RipperDoc.Init()
 	end)
 
 	Observe('RipperDocGameController', 'SetInventoryItemButtonHintsHoverOver', function(self, displayingData)
-		if isRipperDeck then
+		if isRipperDeck and self.buttonHintsController then
 			self.buttonHintsController:RemoveButtonHint(dropAction)
 			self.buttonHintsController:RemoveButtonHint(unequipAction)
 
@@ -133,7 +134,7 @@ function RipperDoc.Init()
 	end)
 
 	Observe('RipperDocGameController', 'SetInventoryItemButtonHintsHoverOut', function(self)
-		if isRipperDeck then
+		if isRipperDeck and self.buttonHintsController then
 			self.buttonHintsController:RemoveButtonHint(dropAction)
 			self.buttonHintsController:RemoveButtonHint(unequipAction)
 		end
