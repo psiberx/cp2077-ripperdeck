@@ -7,6 +7,7 @@ local isGameplay = false
 local isVendorMenu = false
 local isRipperDeck = false
 local ripperDocList = {}
+local ripperDocEntity
 local ripperDocEntityId
 local ripperDocVendorId
 local ripperDocController
@@ -61,7 +62,7 @@ function RipperDoc.Init()
 	end)
 
 	Observe('MenuScenario_Vendor', 'OnLeaveScenario', function()
-		if ripperDocEntityId then
+		if isVendorMenu and ripperDocEntityId and ripperDocEntity then
 			local marketSystem = MarketSystem.GetInstance()
 
 			for i, vendor in ipairs(marketSystem.vendors) do
@@ -78,10 +79,11 @@ function RipperDoc.Init()
 			marketSystem:ClearVendorHashMap()
 
 			Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
-			ripperDocEntityId = nil
-		end
 
-		isVendorMenu = false
+			ripperDocEntityId = nil
+			ripperDocEntity = nil
+			isVendorMenu = false
+		end
 	end)
 
 	Observe('RipperDocGameController', 'OnInitialize', function(self)
@@ -201,7 +203,7 @@ function RipperDoc.Activate(ripperDoc)
 	--ripperDocEntityId = WorldFunctionalTests.SpawnEntity('base\\quest\\tertiary_characters\\victor_vector.ent', spawnTransform, '')
 
 	Cron.Every(0.01, function(timer)
-		local ripperDocEntity = Game.FindEntityByID(ripperDocEntityId)
+		ripperDocEntity = Game.FindEntityByID(ripperDocEntityId)
 
 		if not ripperDocEntity then
 			return
