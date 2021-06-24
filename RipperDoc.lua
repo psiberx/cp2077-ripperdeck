@@ -11,6 +11,7 @@ local ripperDocEntityId
 local ripperDocVendorId
 local ripperDocController
 local dropAction = 'activate_secondary'
+local unequipAction = 'unequip_item'
 
 local function isActiveRipperDoc(vendorRecord)
 	return vendorRecord:VendorType()
@@ -100,24 +101,43 @@ function RipperDoc.Init()
 	end)
 
 	Observe('RipperDocGameController', 'SetInventoryItemButtonHintsHoverOver', function(self, displayingData)
-		self.buttonHintsController:RemoveButtonHint(dropAction)
-
 		if isRipperDeck then
-			if self.mode == RipperdocModes.Item and not displayingData.Empty and not displayingData.IsEquipped and not displayingData.IsVendorItem then
-				self.buttonHintsController:AddButtonHint(dropAction, 'UI-ScriptExports-Drop0')
+			self.buttonHintsController:RemoveButtonHint(dropAction)
+			self.buttonHintsController:RemoveButtonHint(unequipAction)
+
+			if not displayingData.Empty and not displayingData.IsVendorItem then
+				if displayingData.IsEquipped then
+					self.buttonHintsController:AddButtonHint(unequipAction, 'UI-UserActions-Unequip')
+				elseif self.mode == RipperdocModes.Item then
+					self.buttonHintsController:AddButtonHint(dropAction, 'UI-ScriptExports-Drop0')
+				end
 			end
 		end
 	end)
 
 	Observe('RipperDocGameController', 'SetInventoryItemButtonHintsHoverOut', function(self)
 		self.buttonHintsController:RemoveButtonHint(dropAction)
+		self.buttonHintsController:RemoveButtonHint(unequipAction)
 	end)
 
 	Observe('InventoryItemDisplayController', 'OnDisplayClicked', function(self, event)
-		if event:IsAction('activate_secondary') then
-			Game.GetTransactionSystem():RemoveItem(Game.GetPlayer(), self.itemData.ID, 1)
+		if ripperDocController then
+			if event:IsAction(unequipAction) and self.itemData.IsEquipped then
+				Game.GetScriptableSystemsContainer():Get('EquipmentSystem'):GetPlayerData(Game.GetPlayer()):UnequipItem(self.itemData.ID)
 
-			if ripperDocController then
+				ripperDocController:PlaySound('ItemAdditional', 'OnUnequip')
+				ripperDocController.buttonHintsController:RemoveButtonHint(unequipAction)
+
+				if ripperDocController.mode == RipperdocModes.Item then
+					ripperDocController.equiped = false
+				else
+					ripperDocController.InventoryManager:MarkToRebuild()
+					ripperDocController:UpdateCWAreaGrid(ripperDocController.selectedArea)
+				end
+
+			elseif event:IsAction(dropAction) and not self.itemData.IsEquipped and ripperDocController.mode == RipperdocModes.Item then
+				Game.GetTransactionSystem():RemoveItem(Game.GetPlayer(), self.itemData.ID, 1)
+
 				ripperDocController:PlaySound('Item', 'OnDrop')
 				ripperDocController.InventoryManager:MarkToRebuild()
 				ripperDocController:SetInventoryCWList()
