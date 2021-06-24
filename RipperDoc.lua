@@ -57,7 +57,7 @@ function RipperDoc.Init()
 		return a.name < b.name
 	end)
 
-	Observe('Vendor', 'OnVendorMenuOpen', function()
+	Observe('MenuScenario_Vendor', 'OnEnterScenario', function()
 		if isRipperDeck and ripperDocEntity then
 			Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
 			ripperDocEntity = nil
@@ -67,34 +67,37 @@ function RipperDoc.Init()
 	end)
 
 	Observe('MenuScenario_Vendor', 'OnLeaveScenario', function(self)
-		if self:IsA('MenuScenario_Vendor') then
-			isVendorMenu = false
+		-- Nested RTTI call workaround
+		Cron.After(0.001, function()
+			if self:IsA('MenuScenario_Vendor') then
+				isVendorMenu = false
 
-			if ripperDocEntityId then
-				local marketSystem = MarketSystem.GetInstance()
+				if ripperDocEntityId then
+					local marketSystem = MarketSystem.GetInstance()
 
-				for i, vendor in ipairs(marketSystem.vendors) do
-					if vendor.vendorObject then
-						if vendor.vendorObject:GetEntityID().hash == ripperDocEntityId.hash then
-							local vendors = marketSystem.vendors
-							table.remove(vendors, i)
-							marketSystem.vendors = vendors
-							break
+					for i, vendor in ipairs(marketSystem.vendors) do
+						if vendor.vendorObject then
+							if vendor.vendorObject:GetEntityID().hash == ripperDocEntityId.hash then
+								local vendors = marketSystem.vendors
+								table.remove(vendors, i)
+								marketSystem.vendors = vendors
+								break
+							end
 						end
 					end
+
+					marketSystem:ClearVendorHashMap()
+					ripperDocEntityId = nil
 				end
 
-				marketSystem:ClearVendorHashMap()
-				ripperDocEntityId = nil
+				if ripperDocEntity then
+					Cron.After(0.1, function()
+						Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntity:GetEntityID())
+						ripperDocEntity = nil
+					end)
+				end
 			end
-
-			if ripperDocEntity then
-				Cron.After(0.1, function()
-					Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntity:GetEntityID())
-					ripperDocEntity = nil
-				end)
-			end
-		end
+		end)
 	end)
 
 	Observe('RipperDocGameController', 'OnInitialize', function(self)
@@ -166,7 +169,9 @@ function RipperDoc.Init()
 		if ripperDocController then
 			if userData.index == ripperDocController.selectedPreviewSlot then
 				Cron.After(0.001, function()
-					ripperDocController:SelectSlot(ripperDocController.selectedPreviewSlot)
+					if ripperDocController then
+						ripperDocController:SelectSlot(ripperDocController.selectedPreviewSlot)
+					end
 				end)
 			end
 		end
