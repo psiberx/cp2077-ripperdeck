@@ -15,7 +15,7 @@ local logic = {
 	activateItem = function() end,
 }
 
-function ModUI.Init()
+function ModUI.Initialize()
 	style.scale = ImGui.GetFontSize() / 13
 
 	style.windowWidth = 340 * style.scale

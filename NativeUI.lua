@@ -1,4 +1,4 @@
-local GameLanguage = require('GameLanguage')
+local GameLocale = require('GameLocale')
 
 local NativeUI = {}
 
@@ -24,7 +24,7 @@ local function modifyHubMenu()
 	hubMenuButtonData = hubMenuButton.logicController.menuData
 
 	local ripperButtonData = MenuData.new()
-	ripperButtonData.label = GameLanguage.Get('RipperDeck')
+	ripperButtonData.label = GameLocale.Text('RipperDeck')
 	ripperButtonData.icon = 'ico_shards_hub'
 	ripperButtonData.fullscreenName = 'MenuScenario_Vendor'
 	ripperButtonData.identifier = hubMenuButtonId
@@ -52,7 +52,7 @@ local function restoreHubMenu()
 	end
 end
 
-function NativeUI.Init()
+function NativeUI.Initialize()
 	Observe('MenuHubLogicController', 'OnInitialize', function(self)
 		hubMenuController = self
 	end)

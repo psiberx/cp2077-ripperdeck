@@ -1,5 +1,5 @@
 local Cron = require('Cron')
-local GameLanguage = require('GameLanguage')
+local GameLocale = require('GameLocale')
 
 local RipperDoc = {}
 
@@ -22,7 +22,7 @@ local function isActiveRipperDoc(vendorRecord)
 		and Game.GetLocalizedText(vendorRecord:LocalizedName()) ~= 'DELETE'
 end
 
-function RipperDoc.Init()
+function RipperDoc.Initialize()
 	dropAction = CName.new(dropAction)
 	unequipAction = CName.new(unequipAction)
 
@@ -68,7 +68,7 @@ function RipperDoc.Init()
 
 	Observe('MenuScenario_Vendor', 'OnLeaveScenario', function(self)
 		-- Nested RTTI call workaround
-		Cron.After(0.001, function()
+		Cron.NextTick(function()
 			if self:IsA('MenuScenario_Vendor') then
 				isVendorMenu = false
 				isRipperDeck = false
@@ -111,7 +111,7 @@ function RipperDoc.Init()
 
 	Observe('RipperDocGameController', 'Init', function(self)
 		if isRipperDeck and self.ripperId then
-			self.ripperId:SetName(GameLanguage.Get('RipperDeck'))
+			self.ripperId:SetName(GameLocale.Text('RipperDeck'))
 			self.ripperId:GetRootWidget():GetWidget('fluff'):GetWidget('money'):SetVisible(false)
 			self.radioGroupRef.widget:SetVisible(false)
 			--self.ripperdocIdRoot.widget:SetVisible(false)
@@ -169,12 +169,21 @@ function RipperDoc.Init()
 	Observe('CyberwareInventoryMiniGrid', 'OnSlotSpawned', function(_, _, userData)
 		if ripperDocController then
 			if userData.index == ripperDocController.selectedPreviewSlot then
-				Cron.After(0.001, function()
+				Cron.NextTick(function()
 					if ripperDocController then
 						ripperDocController:SelectSlot(ripperDocController.selectedPreviewSlot)
 					end
 				end)
 			end
+		end
+	end)
+
+	-- Fix a game bug where the Unequip action is showing for cyberware but it can't be unequipped
+	Observe('InventoryItemModeLogicController', 'SetInventoryItemButtonHintsHoverOver', function(self, displayingData)
+		if not self:IsEquipmentAreaWeapon(displayingData.EquipmentArea) and not self:IsEquipmentAreaClothing(displayingData.EquipmentArea) then
+			Cron.NextTick(function()
+				self.buttonHintsController:RemoveButtonHint(unequipAction)
+			end)
 		end
 	end)
 

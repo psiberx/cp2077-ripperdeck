@@ -2,7 +2,7 @@
 RipperDeck
 - Manage cyberware without visiting ripperdoc
 - Dispose unwanted cyberware
-- Extends Hub menu
+- Integrates into the Hub menu
 - Multi-language support
 
 Copyright (c) 2021 psiberx
@@ -10,7 +10,7 @@ Copyright (c) 2021 psiberx
 
 loadfile('meta') {
 	mod = 'RipperDeck',
-	version = '0.9.5',
+	version = '0.9.6',
 	framework = '1.14.0'
 }
 
@@ -18,19 +18,19 @@ local Cron = require('Cron')
 --local ModUI = require('ModUI')
 local NativeUI = require('NativeUI')
 local RipperDoc = require('RipperDoc')
-local GameLanguage = require('GameLanguage')
+local GameLocale = require('GameLocale')
 
 registerForEvent('onInit', function()
-	GameLanguage.Init()
+	GameLocale.Initialize()
 
-	RipperDoc.Init()
+	RipperDoc.Initialize()
 
-	--ModUI.Init()
+	--ModUI.Initialize()
 	--ModUI.OnReadyCheck(RipperDoc.IsReady)
 	--ModUI.OnListItems(RipperDoc.GetItems)
 	--ModUI.OnActivate(RipperDoc.Activate)
 
-	NativeUI.Init()
+	NativeUI.Initialize()
 	NativeUI.OnReadyCheck(RipperDoc.IsReady)
 	NativeUI.OnActivate(RipperDoc.Activate)
 end)
