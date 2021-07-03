@@ -2,7 +2,7 @@
 
 RipperDeck is a portable module that allows you to manage your cyberware without visiting ripperdoc. 
 
-- **Equip** or **replace** owned cyberware
+- **Equip** and **swap** owned cyberware
 - **Unequip** installed cyberware
 - **Dispose** unwanted cyberware
 
@@ -20,12 +20,12 @@ You should have `<Cyberpunk 2077>/bin/x64/plugins/cyber_engine_tweaks/mods/Rippe
 
 ## Usage
 
-RipperDeck integrates into the game's UI.
-So just open the *Hub* menu to access it. 
+RipperDeck integrates into the *Hub* menu.
+Open the *Hub* menu to access the new *RipperDeck* section, which repeats the ripperdoc interface with the addition of new actions to unequip and dispose cyberware. 
 
-## TODO
+## Future Plans
 
-- Add more translations
+- An immersive version in which you have to meet the stats requirements and buy the device from ripperdoc in order to access the respec functions. 
 
 ## Acknowledgements
 
