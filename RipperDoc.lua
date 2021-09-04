@@ -166,6 +166,7 @@ function RipperDoc.Initialize()
 	end)
 
 	-- Fix a game bug where the cyberware slot is not selected when opening the menu for the first time
+	--[[
 	Observe('CyberwareInventoryMiniGrid', 'OnSlotSpawned', function(_, _, userData)
 		if ripperDocController then
 			if userData.index == ripperDocController.selectedPreviewSlot then
@@ -177,6 +178,7 @@ function RipperDoc.Initialize()
 			end
 		end
 	end)
+	--]]
 
 	-- Fix a game bug where the Unequip action is showing for cyberware but it can't be unequipped
 	Observe('InventoryItemModeLogicController', 'SetInventoryItemButtonHintsHoverOver', function(self, displayingData)

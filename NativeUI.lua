@@ -45,7 +45,7 @@ local function restoreHubMenu()
 		local journalPanel = hubMenuController.panelJournal.widget
 
 		hubMenuButton.logicController:Init(hubMenuButtonData)
-		hubMenuButton:Reparent(journalPanel)
+		hubMenuButton:Reparent(journalPanel, 2)
 
 		hubMenuButton = nil
 		hubMenuButtonData = nil
@@ -62,7 +62,7 @@ function NativeUI.Initialize()
 	end)
 
 	Observe('MenuItemController', 'OnItemHoverOver', function(self)
-		if hubMenuController then
+		if hubMenuController and self.hoverPanel.widget then
 			if self.menuData.identifier == hubMenuInventoryId and self.hoverPanel.widget:GetNumChildren() < 3 then
 				modifyHubMenu()
 			end
@@ -70,7 +70,7 @@ function NativeUI.Initialize()
 	end)
 
 	Observe('MenuItemController', 'OnHoverPanelOver', function(self)
-		if hubMenuController then
+		if hubMenuController and self.hoverPanel.widget then
 			if self.menuData.identifier == hubMenuInventoryId and self.hoverPanel.widget:GetNumChildren() < 3 then
 				modifyHubMenu()
 			end
