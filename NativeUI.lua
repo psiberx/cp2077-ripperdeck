@@ -42,10 +42,12 @@ end
 
 local function restoreHubMenu()
 	if hubMenuButton then
-		local journalPanel = hubMenuController.panelJournal.widget
+		if hubMenuButton.logicController then
+			local journalPanel = hubMenuController.panelJournal.widget
 
-		hubMenuButton.logicController:Init(hubMenuButtonData)
-		hubMenuButton:Reparent(journalPanel, 2)
+			hubMenuButton.logicController:Init(hubMenuButtonData)
+			hubMenuButton:Reparent(journalPanel, 2)
+		end
 
 		hubMenuButton = nil
 		hubMenuButtonData = nil
