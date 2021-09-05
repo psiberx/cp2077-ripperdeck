@@ -10,7 +10,7 @@ Copyright (c) 2021 psiberx
 
 loadfile('meta') {
 	mod = 'RipperDeck',
-	version = '0.9.8',
+	version = '0.9.9',
 	framework = '1.16.2'
 }
 

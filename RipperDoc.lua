@@ -59,7 +59,8 @@ function RipperDoc.Initialize()
 
 	Observe('MenuScenario_Vendor', 'OnEnterScenario', function()
 		if isRipperDeck and ripperDocEntity then
-			Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
+			--Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
+			exEntitySpawner.Despawn(ripperDocEntity)
 			ripperDocEntity = nil
 		end
 
@@ -93,7 +94,8 @@ function RipperDoc.Initialize()
 
 				if ripperDocEntity then
 					Cron.After(0.1, function()
-						Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntity:GetEntityID())
+						--Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntity:GetEntityID())
+						exEntitySpawner.Despawn(ripperDocEntity)
 						ripperDocEntity = nil
 					end)
 				end
@@ -229,8 +231,8 @@ function RipperDoc.Activate(ripperDoc)
 		spawnPosition.w
 	))
 
-	ripperDocEntityId = Game.GetPreventionSpawnSystem():RequestSpawn(TweakDBID.new('_CWA_.Character.RemoteRipperDoc'), -1, spawnTransform)
-	--ripperDocEntityId = WorldFunctionalTests.SpawnEntity('base\\quest\\tertiary_characters\\victor_vector.ent', spawnTransform, '')
+	--ripperDocEntityId = Game.GetPreventionSpawnSystem():RequestSpawn(TweakDBID.new('_CWA_.Character.RemoteRipperDoc'), -1, spawnTransform)
+	ripperDocEntityId = exEntitySpawner.SpawnRecord('_CWA_.Character.RemoteRipperDoc', spawnTransform)
 
 	Cron.Every(0.01, function(timer)
 		ripperDocEntity = Game.FindEntityByID(ripperDocEntityId)
@@ -253,9 +255,10 @@ function RipperDoc.Activate(ripperDoc)
 end
 
 function RipperDoc.Dispose()
-	if ripperDocEntityId then
-		Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
-		--WorldFunctionalTests.DespawnEntity(Game.FindEntityByID(ripperDocEntityId))
+	if ripperDocEntity then
+		--Game.GetPreventionSpawnSystem():RequestDespawn(ripperDocEntityId)
+		exEntitySpawner.Despawn(ripperDocEntity)
+		ripperDocEntity = nil
 	end
 end
 

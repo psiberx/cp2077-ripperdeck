@@ -140,8 +140,10 @@ function NativeUI.Initialize()
 end
 
 function NativeUI.Dispose()
-	if hubMenuController and hubMenuController.panelInventory.widget:GetNumChildren() >= 3 then
-		restoreHubMenu()
+	if hubMenuController and hubMenuController.panelInventory.widget then
+		if hubMenuController.panelInventory.widget:GetNumChildren() >= 3 then
+			restoreHubMenu()
+		end
 	end
 end
 
