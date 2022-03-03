@@ -12,7 +12,7 @@ local hubMenuController
 local hubMenuButton
 local hubMenuButtonData
 local hubMenuButtonId = 101
-local hubMenuInventoryId = EnumInt(HubMenuItems.Inventory)
+local hubMenuInventoryId
 local hubMenuRequest
 local vendorMenuController
 
@@ -55,6 +55,8 @@ local function restoreHubMenu()
 end
 
 function NativeUI.Initialize()
+    hubMenuInventoryId = EnumInt(HubMenuItems.Inventory)
+
 	Observe('MenuHubLogicController', 'OnInitialize', function(self)
 		hubMenuController = self
 	end)
