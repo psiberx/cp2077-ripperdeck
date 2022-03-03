@@ -114,7 +114,7 @@ function RipperDoc.Initialize()
 	Observe('RipperDocGameController', 'Init', function(self)
 		if isRipperDeck and self.ripperId then
 			self.ripperId:SetName(GameLocale.Text('RipperDeck'))
-			self.ripperId:GetRootWidget():GetWidget('fluff'):GetWidget('money'):SetVisible(false)
+			self.ripperId:GetRootWidget():GetWidget('inkCanvasWidget9'):GetWidget('money'):SetVisible(false)
 			self.radioGroupRef.widget:SetVisible(false)
 			--self.ripperdocIdRoot.widget:SetVisible(false)
 		end

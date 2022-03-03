@@ -12,7 +12,7 @@ local hubMenuController
 local hubMenuButton
 local hubMenuButtonData
 local hubMenuButtonId = 101
-local hubMenuInventoryId = 2 -- HubMenuItems.Inventory
+local hubMenuInventoryId = EnumInt(HubMenuItems.Inventory)
 local hubMenuRequest
 local vendorMenuController
 
