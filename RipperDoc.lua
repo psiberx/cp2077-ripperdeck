@@ -142,10 +142,19 @@ function RipperDoc.Initialize()
 		end
 	end)
 
+    ---@param self InventoryItemDisplayController
+    ---@param event inkPointerEvent
 	Observe('InventoryItemDisplayController', 'OnDisplayClicked', function(self, event)
 		if isRipperDeck then
 			if event:IsAction(unequipAction) and self.itemData.IsEquipped then
-				Game.GetScriptableSystemsContainer():Get('EquipmentSystem'):GetPlayerData(Game.GetPlayer()):UnequipItem(self.itemData.ID)
+			    local player = GetPlayer()
+			    local equipment = EquipmentSystem.GetData(player)
+
+                equipment:UnequipItem(self.itemData.ID)
+
+                if self.equipmentArea == gamedataEquipmentArea.ArmsCW then
+                    equipment:EquipItem(ItemID.CreateQuery('Items.Player_Fists'))
+                end
 
 				ripperDocController:PlaySound('ItemAdditional', 'OnUnequip')
 				ripperDocController.buttonHintsController:RemoveButtonHint(unequipAction)

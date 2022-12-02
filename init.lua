@@ -10,8 +10,8 @@ Copyright (c) 2021 psiberx
 
 loadfile('meta') {
 	mod = 'RipperDeck',
-	version = '1.0.1',
-	framework = '1.19.2'
+	version = '1.0.2',
+	framework = '1.20.0'
 }
 
 local Cron = require('Cron')
